@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magnética FM — Jos Almendárez</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --magenta: #EF0C79;
+    --accent: #0044CC;
+    --dark: #0A0E1A;
+    --gray-100: #F7F7F7;
+    --gray-200: #E8E6E2;
+    --gray-300: #CECCC7;
+    --gray-500: #8A8880;
+    --gray-700: #4A4845;
+    --gray-900: #1A1917;
+    --white: #FFFFFF;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--gray-900); font-family: var(--font-body); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; width: 100%; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 4rem;
+    background: rgba(247,247,247,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-logo { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.01em; color: var(--gray-900); text-decoration: none; }
+  .nav-logo span { color: var(--magenta); }
+  .nav-back { font-size: 0.8rem; font-weight: 500; color: var(--gray-500); letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--gray-900); }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 70% 40%, rgba(0,68,204,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(239,12,121,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #5B8EFF;
+    margin-bottom: 1.5rem; position: relative;
+  }
+
+  .hero-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(4rem, 10vw, 9rem);
+    line-height: 0.88; letter-spacing: -0.02em;
+    color: var(--white); margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .hero-meta {
+    display: flex; gap: 4rem; align-items: flex-start;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 2rem; position: relative;
+  }
+
+  .meta-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+  .meta-value { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--white); }
+
+  /* INTRO */
+  .intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; padding: 6rem 4rem; background: var(--white);
+    align-items: start;
+  }
+
+  .intro-lead {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--gray-900);
+  }
+
+  .intro-body { font-size: 1rem; line-height: 1.85; color: var(--gray-500); }
+  .intro-body strong { color: var(--gray-900); font-weight: 500; }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 2rem; }
+  .tag {
+    background: var(--gray-100); border: 1px solid var(--gray-200);
+    border-radius: 2px; padding: 0.28rem 0.7rem;
+    font-size: 0.68rem; color: var(--gray-700); font-weight: 500;
+  }
+
+  /* GALLERY */
+  .gallery-hero {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 400px 300px; gap: 4px;
+    background: var(--gray-200);
+  }
+  .gallery-hero .g-main { grid-row: 1 / 3; }
+  .gallery-hero img, .gallery-hero .g-img { width: 100%; height: 100%; object-fit: cover; }
+  .g-img { overflow: hidden; }
+  .g-img img { height: 100%; object-fit: cover; }
+
+  /* SECTION */
+  .section { padding: 6rem 4rem; }
+  .section.gray { background: var(--gray-100); }
+  .section.dark { background: var(--dark); }
+
+    .section-label {
+    font-size: 0.68rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--magenta); margin-bottom: 0.5rem;
+  }
+  .section-label.white { color: var(--white); }
+
+    .section-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.01em;
+    line-height: 1; color: var(--gray-900); margin-bottom: 3rem;
+  }
+  .section-title.white { color: var(--white); }
+
+  /* DECISIONES GRID */
+  .decisions-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .decision-card {
+    padding: 2.5rem; border: 1px solid var(--gray-200);
+    border-radius: 6px; background: var(--white);
+  }
+
+  .decision-number {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 3rem; line-height: 1; color: var(--gray-200);
+    margin-bottom: 1rem; letter-spacing: -0.02em;
+  }
+
+  .decision-title {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.3rem; color: var(--gray-900); margin-bottom: 0.6rem;
+  }
+
+  .decision-desc { font-size: 0.875rem; color: var(--gray-500); line-height: 1.7; }
+  .decision-desc strong { color: var(--gray-900); font-weight: 500; }
+
+  /* GALLERY SIMPLE */
+  .gallery-simple {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 4px; background: var(--gray-200);
+  }
+
+  .gallery-simple img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  .gallery-simple .g-wide { grid-column: span 3; aspect-ratio: 16/7; }
+
+  /* NOTA */
+  .nota {
+    display: flex; align-items: flex-start; gap: 1.5rem;
+    padding: 2rem 2.5rem; background: var(--gray-100);
+    border-left: 3px solid var(--gray-300); border-radius: 0 6px 6px 0;
+    margin-top: 3rem;
+  }
+  .nota-icon { font-size: 1.2rem; flex-shrink: 0; padding-top: 2px; }
+  .nota-text { font-size: 0.875rem; color: var(--gray-700); line-height: 1.7; }
+  .nota-text strong { color: var(--gray-900); font-weight: 500; }
+
+    /* CTA */
+  .cta-section {
+    padding: 6rem 4rem !important;
+    text-align: center !important;
+    background: var(--gray-100) !important;
+  }
+  .cta-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.01em;
+    color: var(--gray-900) !important; margin-bottom: 0.75rem;
+  }
+  .cta-sub { font-size: 1rem; color: var(--gray-500) !important; margin-bottom: 2.5rem; }
+  .btn-primary {
+    background: var(--gray-900) !important; color: var(--white) !important; border: none;
+    border-radius: 4px; padding: 0.9rem 2.5rem;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: opacity 0.2s; display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.8; }
+
+  footer {
+    padding: 1.75rem 4rem; border-top: 1px solid var(--gray-200);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+  .footer-logo span { color: var(--magenta); }
+  .footer-copy { font-size: 0.75rem; color: var(--gray-500); }
+
+    @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; min-height: 70vh; }
+    .hero-meta { gap: 1.5rem; flex-wrap: wrap; }
+    .intro { grid-template-columns: 1fr; gap: 2rem; padding: 3.5rem 1.5rem; }
+    .gallery-hero { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 200px; }
+    .gallery-hero .g-main { grid-row: 1 / 3; }
+    .section { padding: 3.5rem 1.5rem; }
+    .decisions-grid { grid-template-columns: 1fr; }
+    .cta-section { padding: 4rem 1.5rem; }
+    footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 3.5rem; }
+    .gallery-hero { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .gallery-hero .g-main { grid-row: auto; }
+    .g-img img { height: 220px; object-fit: cover; }
+    .meta-value { font-size: 0.9rem; }
+  }
+    .hero { padding: 6rem 1.5rem 3rem; min-height: 70vh; }
+    .hero-meta { gap: 2rem; flex-wrap: wrap; }
+    .intro { grid-template-columns: 1fr; gap: 2rem; padding: 3.5rem 1.5rem; }
+    .gallery-hero { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 200px; }
+    .gallery-hero .g-main { grid-row: 1 / 3; }
+    .section { padding: 3.5rem 1.5rem; }
+    .decisions-grid { grid-template-columns: 1fr; }
+    .gallery-simple { grid-template-columns: 1fr 1fr; }
+    .gallery-simple .g-wide { grid-column: span 2; }
+    .cta-section { padding: 4rem 1.5rem; }
+    footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Jos<span>.</span></a>
+  <a href="index.html#trabajo" class="nav-back">← Volver al portafolio</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Caso de estudio · Identidad corporativa</div>
+  <h1 class="hero-title">Magnética<br>107.1 FM</h1>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Tipo</div>
+      <div class="meta-value">Identidad corporativa</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Rol</div>
+      <div class="meta-value">Diseño · Dirección de arte</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Alcance</div>
+      <div class="meta-value">Papelería · Print · Stand · Cartel</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Ciudad</div>
+      <div class="meta-value">San Luis Potosí</div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-lead">
+    Un logo heredado. Un sistema construido desde cero.
+  </div>
+  <div>
+    <p class="intro-body">
+      Magnética 107.1 FM no es una radio convencional. Su propuesta es cultural — más ideas, más diversidad, menos fórmula. El reto no era inventar una marca: el logotipo ya existía. El trabajo era <strong>construir un sistema de identidad coherente alrededor de él</strong>, que funcionara en papelería corporativa, materiales impresos, stand de exhibición y comunicación visual.
+    </p>
+    <p class="intro-body" style="margin-top:1rem;">
+      Eso es distinto a tener carta blanca. Requiere más criterio: entender qué tiene el logo, qué le falta, y cómo extender su lógica sin traicionarla ni forzarla.
+    </p>
+    <div class="tags">
+      <span class="tag">Identidad corporativa</span>
+      <span class="tag">Sistema visual</span>
+      <span class="tag">Papelería</span>
+      <span class="tag">Diseño editorial</span>
+      <span class="tag">Stand</span>
+      <span class="tag">Logo heredado</span>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA PRINCIPAL -->
+<div class="gallery-hero">
+  <div class="g-main g-img">
+    <img src="1776443658178_image.png" alt="Cartel Magnética FM con foto de estudio">
+  </div>
+  <div class="g-img">
+    <img src="1776443663996_image.png" alt="Identidad corporativa Magnética FM">
+  </div>
+  <div class="g-img">
+    <img src="1776443673915_image.png" alt="Brochure Magnética FM">
+  </div>
+  <div class="g-img">
+    <img src="1776443682564_image.png" alt="Carpeta y plumas Magnética FM">
+  </div>
+  <div class="g-img">
+    <img src="1776443689050_image.png" alt="Stand de exhibición Magnética FM">
+  </div>
+</div>
+
+<!-- DECISIONES DE DISEÑO -->
+<section class="section gray">
+  <div class="section-label">Proceso</div>
+  <div class="section-title">Las decisiones que arman el sistema</div>
+  <div class="decisions-grid">
+    <div class="decision-card">
+      <div class="decision-number">01</div>
+      <div class="decision-title">Azul noche como base</div>
+      <p class="decision-desc">El logo venía con azul corporativo estándar. La decisión fue llevarlo a un azul más profundo, casi nocturno, que <strong>evoca señal, frecuencia y espacio</strong> — coherente con una radio cultural que transmite ideas, no solo música.</p>
+    </div>
+    <div class="decision-card">
+      <div class="decision-number">02</div>
+      <div class="decision-title">La nube como elemento de transición</div>
+      <p class="decision-desc">En lugar de un corte limpio entre el fondo oscuro y el blanco, se usó una <strong>forma orgánica de nube</strong> como divisor. Rompe la rigidez corporativa sin perder estructura, y da personalidad a todos los materiales sin depender del logo.</p>
+    </div>
+    <div class="decision-card">
+      <div class="decision-number">03</div>
+      <div class="decision-title">Iconos ilustrados en línea</div>
+      <p class="decision-desc">El universo de la estación — música, tecnología, cultura — se tradujo en <strong>ilustraciones vectoriales de línea</strong> sobre el fondo estrellado. Añaden contexto sin saturar, y dan al sistema un tono más editorial que publicitario.</p>
+    </div>
+    <div class="decision-card">
+      <div class="decision-number">04</div>
+      <div class="decision-title">Consistencia a escala real</div>
+      <p class="decision-desc">El sistema se llevó hasta un <strong>stand de exhibición de gran formato</strong>. La identidad no se pensó solo para papel — se probó en el espacio físico donde la estación tiene presencia ante su audiencia.</p>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label">¿Tienes un proyecto?</div>
+  <div class="cta-title">Hablemos</div>
+  <p class="cta-sub">Si tu negocio merece verse mejor de lo que se ve hoy, estoy disponible.</p>
+  <a href="index.html#contacto" class="btn-primary">Ver más trabajo y contacto</a>
+</section>
+
+<footer>
+  <span class="footer-logo">Jos<span>.</span></span>
+  <span class="footer-copy">© 2026 Jos Almendárez — josalmendarez.com</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faragauss — Josalmendarez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0A;
+    --white: #FFFFFF;
+    --gray: #F7F7F7;
+    --magenta: #EF0C79;
+    --yellow: #F5C800;
+    --text-muted: #888;
+    --border: #E0E0E0;
+    --gray-100: #F7F7F7;
+    --gray-200: #E8E6E2;
+    --gray-500: #8A8880;
+    --gray-900: #1A1917;
+    --font-display: "Barlow Condensed", sans-serif;
+    --font-body: "DM Sans", sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 4rem;
+    background: rgba(247,247,247,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-logo { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.01em; color: var(--gray-900); text-decoration: none; }
+  .nav-logo span { color: var(--magenta); }
+  .nav-back { font-size: 0.8rem; font-weight: 500; color: var(--gray-500); letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--gray-900); }
+
+  /* HERO */
+  .hero {
+    background: var(--gray-900);
+    min-height: 85vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--yellow); margin-bottom: 1.5rem; position: relative; }
+  .hero-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(4rem, 10vw, 9rem); line-height: 0.88; letter-spacing: -0.02em; color: var(--white); margin-bottom: 2.5rem; position: relative; }
+  .hero-meta { display: flex; gap: 4rem; align-items: flex-start; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; position: relative; }
+  .meta-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+  .meta-value { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--white); }
+
+  /* INFO ROW */
+  .info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 0 40px;
+  }
+
+  .info-cell {
+    background: var(--white);
+    padding: 32px 28px;
+  }
+
+  .info-cell-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .info-cell-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.2;
+  }
+
+  /* RETO */
+  .reto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .reto-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .reto-left h2 em {
+    font-style: normal;
+    color: var(--magenta);
+  }
+
+  .reto-right p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #444;
+    font-weight: 300;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 40px;
+  }
+
+  /* GALLERY */
+  .gallery-full {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    background: #111;
+  }
+
+  .gallery-grid img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s;
+  }
+
+  .gallery-grid img:hover {
+    filter: brightness(1.05);
+  }
+
+  .gallery-single img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* LO QUE HICE */
+  .hice-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .hice-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  .hice-right p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #444;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .decisions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .decision-item {
+    background: var(--white);
+    padding: 24px;
+  }
+
+  .decision-item strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+
+  .decision-item p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+  }
+
+  /* SISTEMA VISUAL */
+  .sistema {
+    background: var(--black);
+    padding: 80px 40px;
+  }
+
+  .sistema-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .sistema   .section-label {
+    font-size: 0.68rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--magenta); margin-bottom: 0.5rem;
+  }
+  .section-label.white { color: var(--white); }
+
+  .section-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.01em;
+    line-height: 1; color: var(--gray-900); margin-bottom: 3rem;
+  }
+  .section-title.white { color: var(--white); }
+
+  .sistema h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 4vw, 56px);
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 48px;
+    line-height: 1;
+  }
+
+  .sistema-swatches {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .swatch-color {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+  }
+
+  .swatch-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .swatch-hex {
+    font-size: 11px;
+    color: #444;
+    font-family: monospace;
+  }
+
+  .tipo-row {
+    display: flex;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid #222;
+    padding-top: 32px;
+  }
+
+  .tipo-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tipo-name {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #444;
+  }
+
+  .tipo-sample-barlow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .tipo-sample-dm {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: #777;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* RESULTADO */
+  .resultado {
+    background: var(--yellow);
+    padding: 80px 40px;
+  }
+
+  .resultado-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .resultado   .section-label {
+    font-size: 0.68rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--magenta); margin-bottom: 0.5rem;
+  }
+  .section-label.white { color: var(--white); }
+
+  .section-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.01em;
+    line-height: 1; color: var(--gray-900); margin-bottom: 3rem;
+  }
+  .section-title.white { color: var(--white); }
+
+  .resultado h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 5vw, 64px);
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .resultado p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: rgba(0,0,0,0.65);
+    font-weight: 300;
+  }
+
+  .resultado-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .stat-item {
+    border-top: 1px solid rgba(0,0,0,0.15);
+    padding-top: 24px;
+  }
+
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 56px;
+    font-weight: 900;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-desc {
+    font-size: 14px;
+    color: rgba(0,0,0,0.55);
+    font-weight: 400;
+  }
+
+  /* NEXT */
+  .next-project {
+    border-top: 1px solid var(--border);
+    padding: 64px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    text-decoration: none;
+    color: var(--black);
+    transition: background 0.2s;
+  }
+
+  .next-project:hover {
+    background: var(--gray);
+  }
+
+  .next-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .next-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 40px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .next-arrow {
+    font-size: 48px;
+    color: var(--magenta);
+    font-weight: 300;
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+    @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    .hero { min-height: 70vh; }
+    .hero-inner { padding: 0 1.25rem; }
+    .hero-title { font-size: 3rem; }
+    .info-row { grid-template-columns: 1fr 1fr; margin: 0 1.25rem; }
+    section { padding: 3rem 1.25rem; }
+    .reto-grid, .hice-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-grid img, .gallery-single img { height: 240px; }
+    .decisions { grid-template-columns: 1fr; }
+    .resultado-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .divider { margin: 0 1.25rem; }
+    .sistema { padding: 3rem 1.25rem; }
+    .resultado { padding: 3rem 1.25rem; }
+    .cta-section { padding: 4rem 1.25rem; }
+    footer { padding: 1.25rem 1.25rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 2.5rem; }
+    .info-row { grid-template-columns: 1fr; }
+  }
+
+    .hero-inner { padding: 0 20px; }
+
+    .hero-title { font-size: 56px; }
+
+    .info-row {
+      grid-template-columns: 1fr 1fr;
+      margin: 0 20px;
+    }
+
+    section { padding: 60px 20px; }
+
+    .reto-grid,
+    .hice-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .gallery-grid { grid-template-columns: 1fr; }
+
+    .gallery-grid img,
+    .gallery-single img { height: 280px; }
+
+    .decisions { grid-template-columns: 1fr; }
+
+    .resultado-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .divider { margin: 0 20px; }
+
+    .sistema { padding: 60px 20px; }
+    .resultado { padding: 60px 20px; }
+
+    .next-project { padding: 40px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .next-title { font-size: 32px; }
+  }
+
+    /* CTA */
+  .cta-section {
+    padding: 6rem 4rem !important;
+    text-align: center !important;
+    background: var(--gray-100) !important;
+  }
+  .cta-title {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.01em;
+    color: var(--gray-900) !important; margin-bottom: 0.75rem;
+  }
+  .cta-sub { font-size: 1rem; color: var(--gray-500) !important; margin-bottom: 2.5rem; }
+  .btn-primary {
+    background: var(--gray-900) !important; color: var(--white) !important; border: none;
+    border-radius: 4px; padding: 0.9rem 2.5rem;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: opacity 0.2s; display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.8; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Jos<span>.</span></a>
+  <a href="index.html#trabajo" class="nav-back">← Volver al portafolio</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Caso de estudio · Diseño editorial · Print</div>
+  <h1 class="hero-title">Faragauss<br>System</h1>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">Tipo</div>
+      <div class="meta-value">Catálogo de producto</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Rol</div>
+      <div class="meta-value">Diseño editorial completo</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Formato</div>
+      <div class="meta-value">Print · PDF</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Alcance</div>
+      <div class="meta-value">200+ productos</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="margin-top:0"></div>
+
+<!-- RETO -->
+<section>
+  <div class="reto-grid">
+    <div class="reto-left fade-up">
+      <div class="section-label">El reto</div>
+      <h2>Contenido<br>técnico,<br><em>legible.</em></h2>
+    </div>
+    <div class="reto-right fade-up">
+      <p>
+        Un catálogo de producto industrial con múltiples líneas, especificaciones técnicas, diagramas unifilares y fotografía de producto. Todo tenía que coexistir sin que el documento se convirtiera en un manual de usuario.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALLERY 1 -->
+<div class="gallery-full">
+  <div class="gallery-grid">
+    <img src="faragauss-spread-1.png" alt="Spread interior Faragauss — líneas de producto">
+    <img src="faragauss-spread-2.png" alt="Spread interior Faragauss — fichas técnicas">
+  </div>
+</div>
+
+<!-- LO QUE HICE -->
+<section>
+  <div class="hice-grid">
+    <div class="hice-left fade-up">
+      <div class="section-label">Lo que hice</div>
+      <h2>Sistema<br>visual<br>desde<br>cero.</h2>
+    </div>
+    <div class="hice-right fade-up">
+      <p>
+        Definí el sistema visual completo desde cero — paleta, tipografía, retícula y jerarquía editorial. Cada spread tiene una lógica clara: la foto trabaja como ancla visual, los datos técnicos se organizan en tablas limpias, y el color diferencia líneas de producto sin romper la coherencia del conjunto.
+      </p>
+      <div class="decisions">
+        <div class="decision-item">
+          <strong>Retícula</strong>
+          <p>Estructura modular que acomoda foto, tabla de specs y diagrama sin perder orden visual.</p>
+        </div>
+        <div class="decision-item">
+          <strong>Color como sistema</strong>
+          <p>Negro, amarillo y rojo diferencian líneas de producto. Cada sección tiene su propio bloque de color.</p>
+        </div>
+        <div class="decision-item">
+          <strong>Foto como ancla</strong>
+          <p>La imagen del producto ocupa el tercio superior de cada ficha. Contexto visual antes que datos.</p>
+        </div>
+        <div class="decision-item">
+          <strong>Tipografía funcional</strong>
+          <p>Jeraquía clara: nombre del producto, modelo, especificaciones técnicas y descripción en capas distintas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY 2 -->
+<div class="gallery-full">
+  <div class="gallery-single">
+    <img src="faragauss-spread-3.png" alt="Spreads interiores — barras y supresores">
+  </div>
+</div>
+
+<!-- SISTEMA VISUAL -->
+<div class="sistema">
+  <div class="sistema-inner">
+    <div class="section-label">Sistema visual</div>
+    <h2>Paleta & Tipografía</h2>
+    <div class="sistema-swatches fade-up">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0A0A0A; border: 1px solid #333"></div>
+        <div class="swatch-label">Negro</div>
+        <div class="swatch-hex">#0A0A0A</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F5C800"></div>
+        <div class="swatch-label">Amarillo</div>
+        <div class="swatch-hex">#F5C800</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#CC1F1F"></div>
+        <div class="swatch-label">Rojo</div>
+        <div class="swatch-hex">#CC1F1F</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FFFFFF; border: 1px solid #333"></div>
+        <div class="swatch-label">Blanco</div>
+        <div class="swatch-hex">#FFFFFF</div>
+      </div>
+    </div>
+    <div class="tipo-row fade-up">
+      <div class="tipo-item">
+        <span class="tipo-name">Display</span>
+        <span class="tipo-sample-barlow">Faragauss</span>
+      </div>
+      <div class="tipo-item">
+        <span class="tipo-name">Cuerpo</span>
+        <span class="tipo-sample-dm">Especificaciones técnicas<br>y descripciones de producto.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div class="resultado">
+  <div class="resultado-inner" style="grid-template-columns: 1fr;">
+    <div class="fade-up">
+      <div class="section-label">Resultado</div>
+      <h2>Un doc que vende.</h2>
+      <p style="max-width: 640px;">
+        Un PDF de distribución que funciona como herramienta de ventas: lo suficientemente técnico para ingenieros, lo suficientemente claro para quien firma la orden de compra.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT PROJECT -->
+
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label">¿Tienes un proyecto?</div>
+  <div class="cta-title">Hablemos</div>
+  <p class="cta-sub">Si tu negocio merece verse mejor de lo que se ve hoy, estoy disponible.</p>
+  <a href="index.html#contacto" class="btn-primary">Ver más trabajo y contacto</a>
+</section>
+
+<script>
+  // Fade-up on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+<footer>
+  <span class="footer-logo">Jos<span>.</span></span>
+  <span class="footer-copy">© 2026 Jos Almendárez — josalmendarez.com</span>
+</footer>
+</body>
+</html>
